@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Todo App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div id="app" class="h-screen flex justify-center items-center">
+      <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <input
+          v-model="newTask"
+          type="text"
+          placeholder="Add a new task"
+          class="w-full p-2 border border-gray-300 rounded mt-1"
+        />
+        <button
+          @click="addTask"
+          class="w-full mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Add Task
+        </button>
+
+        <ul class="list-disc list-inside mt-4">
+          <li
+            v-for="(task, index) in tasks"
+            :key="index"
+            class="mt-2 flex justify-between items-center"
+          >
+            {{ task }}
+            <button
+              @click="removeTask(index)"
+              class="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Remove
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          newTask: "",
+          tasks: [],
+        },
+        methods: {
+          addTask() {
+            if (this.newTask.trim() !== "") {
+              this.tasks.push(this.newTask);
+              this.newTask = "";
+            }
+          },
+          removeTask(index) {
+            this.tasks.splice(index, 1);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
