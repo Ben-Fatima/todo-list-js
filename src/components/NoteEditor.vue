@@ -1,11 +1,25 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useNotesStore } from '@/stores/notes'
+
+const store = useNotesStore()
+const route = useRoute()
+const router = useRouter()
 const note = ref({
+  id: route.params.id,
   title: '',
   content: ''
 })
-function submit() {
-  // todo logic
+
+onMounted(async () => {
+  const existingNote = await store.getNoteById(route.params.id)
+  note.value = { ...existingNote }
+})
+
+const submitNote = async () => {
+  await store.updateNote(note.value)
+  router.push('/')
 }
 </script>
 
@@ -17,7 +31,7 @@ function submit() {
         <input
           id="title"
           type="text"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-100 bg-gray-500 leading-tight focus:outline-none focus:shadow-outline"
           v-model="note.title"
         />
       </div>
@@ -26,13 +40,13 @@ function submit() {
         <textarea
           id="content"
           type="text"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-100 bg-gray-500 leading-tight focus:outline-none focus:shadow-outline"
           v-model="note.content"
           rows="4"
         />
       </div>
       <button class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">
-        save
+        Save
       </button>
     </form>
   </div>
